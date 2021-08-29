@@ -1,0 +1,12 @@
+@import '../config/variables';
+
+.searchbar {
+  background: $color-primary-1;
+  border: 1px solid $color-primary-3;
+  padding: 0.5rem 2rem;
+  outline: none;
+  color: $color-secondary-1;
+  &::placeholder {
+    text-align: center;
+  }
+}

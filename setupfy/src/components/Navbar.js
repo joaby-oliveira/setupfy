@@ -3,6 +3,7 @@ import Logo from '../../public/setupfy.svg'
 import styles from '../../styles/components/Navbar.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import Searchbar from './Searchbar'
 const Navbar = () => {
   return (
     <nav className={`${styles.navbar} flex crossCenter spaceBetween`}>
@@ -13,6 +14,7 @@ const Navbar = () => {
           </div>
         </a>
       </Link>
+      <Searchbar />
       <div className={`${styles.icons} flex crossCenter`}>
         <Home className="icon" />
         <MessageSquare className="icon" />
