@@ -49,7 +49,7 @@
         transition: 0.2s ease;
         cursor: pointer;
         &:nth-child(2) {
-          margin-left: 1rem;
+          margin-left: 2rem;
         }
         &:hover{
           color: $color-enphasis-3;
@@ -57,6 +57,11 @@
         &:active{
           transform: scale(1.1);
         }
+      }
+      .number {
+        margin: 0 1rem 0 .5rem;
+        color: $color-secondary-3;
+        font-size: 0.8rem;
       }
     }
   }

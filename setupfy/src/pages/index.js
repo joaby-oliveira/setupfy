@@ -12,9 +12,18 @@ export default function Home() {
       </Head>
       <Navbar />
       <Post
+        likes={327}
+        comments={18}
+        ownerImage="https://avatars.githubusercontent.com/u/55921991?v=4"
+        ownerName="joaby._.oliveira"
         src="https://lh3.googleusercontent.com/4L48QV0mlrhezujezWmpQZ0QA55PkKppVL0nlWAhDU5lwgvcTOeHP1lvwIOpq7pEgafYWhxaD7rKQykhP3Nou3Q7ZiUT8IIVEtjp_9tCXBZBmDvq0b_TEmoYbQaPCi81oP5tSCsydd1kO7B1XTWO3dNQdsoQhqbrg_QIqbakiA1NXtEOoxsMDLooZez-mumjHgoylNgD83jJjNSGhswrS8odKB8fTVDd7qG84hPiezgnYgSGZZ1qsLmt9IowjVJdBMTRV_rb8Ct44dZBqMGP8edfp1ikR36OBuxpkOqfSCWwu7LJGdNxIHXk_b4Qe-dBSMlfMp88rIMzEr-AzbRdX-Ek6ndc3NIXVgKrg_eoZQxrZnN42owE8-LxAQbZZee1Te0EmShX8AjEFsOELjjVAmnVNd6EbvwlwrE0XauP6DYRwmuHiroMWsa3pcvGd4NRX5HBEpgER4Fb6n0GaPD9rCk3kWlolLcDtdZdtl2ZQqIJvPS1GZ05r3hz4DXhhTrRinr8PUKrq1CfCdzjwi_onYsuSV9eXS5eHGi_hIt0qpVwghYM47ZLDoUyru8eSmw8zaG-qRUL3I5Wrn7z3IOHkrwAp4fkf31LOZIgwoQiZc8M672iVjO4_S5Oq4N9G0P-CMCidHtUMu49lzPOCIimVjIvFzfzGtOWiIl57z0-DFvAY8Ut3CKgQQdmZJwskZwhSbkE9nDqjLBIQ5-Ii8HWXq3l=w1366-h665-no?authuser=0"
       />
-      <Post src="https://static.wixstatic.com/media/c8a09d_f8bc766ef6384feca7517639c39e42e5~mv2.jpg/v1/fill/w_1000,h_750,al_c,q_90,usm_0.66_1.00_0.01/c8a09d_f8bc766ef6384feca7517639c39e42e5~mv2.jpg"
+      <Post
+        likes={204}
+        comments={11}
+        ownerName="na_vitao"
+        ownerImage="https://avatars.githubusercontent.com/u/67922539?v=4"
+        src="https://static.wixstatic.com/media/c8a09d_f8bc766ef6384feca7517639c39e42e5~mv2.jpg/v1/fill/w_1000,h_750,al_c,q_90,usm_0.66_1.00_0.01/c8a09d_f8bc766ef6384feca7517639c39e42e5~mv2.jpg"
       />
     </>
   )

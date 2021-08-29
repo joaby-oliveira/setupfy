@@ -11,8 +11,8 @@ const Post = (props) => {
         hashtag
       */}
       <div className={`${styles.header} flex crossCenter`}>
-        <img src="https://avatars.githubusercontent.com/u/55921991?v=4" width="60" height="60" className={styles.profileImage} />
-        <Link href="/"><a href=""><h2 className={styles.username}>little._.joaby</h2></a></Link>
+        <img src={props.ownerImage} width="60" height="60" className={styles.profileImage} />
+        <Link href={`/${props.ownerName}`}><a href=""><h2 className={styles.username}>{props.ownerName}</h2></a></Link>
       </div >
       <div className={styles.imageBox}>
         <img
@@ -23,7 +23,9 @@ const Post = (props) => {
       <div className={`${styles.bottom} flex column`}>
         <div className={`${styles.icons} flex crossCenter`}>
           <Heart className="icon"/>
+          <p className={styles.number}>{props.likes}</p>
           <MessageCircle className="icon"/>
+          <p className={styles.number}>{props.comments}</p>
         </div>
       </div>
     </article>
