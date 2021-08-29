@@ -10,5 +10,6 @@ router.get('/', (req, res) => {
 });
 
 router.post("/user", UserController.create);
+router.get("/user/:userName", UserController.findUser);
 
 module.exports = router;
