@@ -1,0 +1,22 @@
+@import '../config/variables';
+
+.navbar {
+  width: 100%;
+  background: $color-primary-2;
+  padding: 1rem 4rem;
+  border-bottom: 2px solid $color-primary-1;
+  .logo {
+    transition: 0.2s;
+  }
+  .icons {
+    svg {
+      margin: 0 1rem;
+    }
+    img {
+      width: 2rem;
+      border-radius: 10px;
+      margin: 0 0 0 1rem;
+      border: 2px solid #23ee11;
+    }
+  }
+}

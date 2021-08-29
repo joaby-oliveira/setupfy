@@ -1,0 +1,53 @@
+@import 'config/variables';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: $color-primary-3;
+}
+
+h1 {
+  font-family: sans-serif;
+  color: #FF4656;
+}
+
+.icon {
+  color: $color-secondary-1;
+}
+
+// Flex
+.flex {
+  display: flex;
+}
+
+.mainCenter {
+  justify-content: center;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.crossCenter {
+  align-items: center;
+}
+
+.mainStart {
+  justify-content: flex-start;
+}
+
+.crossStart {
+  align-items: flex-start;
+}
+
+.crossEnd {
+  align-items: flex-end;
+}
+
+.spaceBetween {
+  justify-content: space-between;
+}
