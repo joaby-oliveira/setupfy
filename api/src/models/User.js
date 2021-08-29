@@ -13,13 +13,27 @@ class User{
     async findByEmail(email){
         try{
             let user = await database.select().table("users").where({email: email});
-            // if(user !== ['']){
-                return {status: true, user}
-            // }else{
-            //     return {status: false}
-            // }
+            return {status: true, user}
         }catch(err){
             return {status: false, msg: err}
+        }
+    }
+
+    async findByName(userName){
+        try{
+            let user = await database.select().table("users").where('userName', 'like', '%'+ userName +'%');
+            return {status: true, user}
+        }catch(err){
+            return {status: false, user}
+        }
+    }
+
+    async findAllUsers(){
+        try{
+            let user = await database.select().table("users");
+            return {status: true, user}
+        }catch(err){
+            return {status: false, user}
         }
     }
 }
