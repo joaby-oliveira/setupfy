@@ -1,9 +1,15 @@
 @import 'config/variables';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  user-select: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 body {
@@ -13,6 +19,10 @@ body {
 h1 {
   font-family: sans-serif;
   color: #FF4656;
+}
+
+h2, h3, h4, p, input {
+  font-family: 'Poppins', sans-serif;
 }
 
 .icon {

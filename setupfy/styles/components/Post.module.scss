@@ -1,0 +1,63 @@
+@import "../config/variables";
+
+.post {
+  margin: 1rem;
+  width: 30rem;
+  height: 30rem;
+  border: $border;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  .header {
+    padding: 1rem;
+    .profileImage {
+      width: 3rem;
+      height: 3rem;
+      object-fit: cover;
+      border-radius: 100px;
+    }
+    .username {
+      font-size: 1rem;
+      margin-left: 1rem;
+      font-weight: 400;
+      color: $color-secondary-1;
+      transition: 0.2s ease;
+      &:hover {
+        font-weight: 700;
+      }
+    }
+  }
+  .imageBox {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.2s ease;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 70px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+  .bottom {
+    padding: 1rem;
+    .icons {
+      svg {
+        transition: 0.2s ease;
+        cursor: pointer;
+        &:nth-child(2) {
+          margin-left: 1rem;
+        }
+        &:hover{
+          color: $color-enphasis-3;
+        }
+        &:active{
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
