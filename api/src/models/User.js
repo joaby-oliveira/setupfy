@@ -27,6 +27,15 @@ class User{
             return {status: false, user}
         }
     }
+
+    async findAllUsers(){
+        try{
+            let user = await database.select().table("users");
+            return {status: true, user}
+        }catch(err){
+            return {status: false, user}
+        }
+    }
 }
 
 module.exports = new User();

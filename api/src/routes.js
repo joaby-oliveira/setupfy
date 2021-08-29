@@ -11,5 +11,6 @@ router.get('/', (req, res) => {
 
 router.post("/user", UserController.create);
 router.get("/user/:userName", UserController.findUser);
+router.get("/users", UserController.findAllUsers);
 
 module.exports = router;

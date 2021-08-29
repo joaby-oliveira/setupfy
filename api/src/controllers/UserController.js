@@ -98,6 +98,23 @@ class UserController{
             })
         }
     }
+    
+    async findAllUsers(req, res){
+        const {status, user} = await User.findAllUsers();
+        if(user.length > 0) {
+            res.statusCode = 200;
+            res.json({
+                status, 
+                user
+            })
+        }else{
+            res.statusCode = 406;
+            res.json({
+                status: false, 
+                msg: "Não há usuários na base de dados"
+            })
+        }
+    }
 }
 
 module.exports = new UserController();
