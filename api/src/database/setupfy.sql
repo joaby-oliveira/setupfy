@@ -13,16 +13,17 @@ create table users(
 
 create table posts(
     id int not null auto_increment primary key,
-    cont text not null,
+    content text not null,
     img varchar(255),
-    likes int not null
+    likes int not null,
+    tags varchar(50)
 );
 
 create table comments(
     id int not null auto_increment primary key, 
     user_id int not null,
     post_id int not null,
-    cont text not null,
+    content text not null,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
