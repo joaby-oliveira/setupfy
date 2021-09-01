@@ -36,6 +36,24 @@ class User{
             return {status: false, user}
         }
     }
+
+    async findById(id){
+        try{
+            let user = await database.select().table("users").where({id: id});
+            return {status: true, user}
+        }catch(err){
+            return {status: false, msg: err}
+        }
+    }
+
+    async update(data, id){
+        try{
+           let result = await database.update(data).table("users").where({id: id})
+           return {status: true, msg: "Usuário atualizado com sucesso", result}
+        }catch(err){
+            return {status: false, msg: 'Usuário não pode ser atualizado erro: ' + err}
+        }
+    }
 }
 
 module.exports = new User();

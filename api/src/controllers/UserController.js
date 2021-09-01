@@ -2,59 +2,72 @@ const User = require("../models/User");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 
-class UserController{
-    async create(req, res){
-        const {userName, email, password} = req.body;
-        
+const salt = bcrypt.genSaltSync(10);
+
+const userValidation = {
+    userName: (userName, res) => {
         if(userName == undefined || utils.isEmpty(userName) || !utils.isValidLength(userName, 3)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "O nome de usuário deve ter pelo menos 3 caracteres"
             });
-            return;
+            return false;
         }else if(utils.isSpaced(userName)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "O nome de usuário não deve ter espaços"
             });
-            return;
+            return false;
         }
-
+    },
+    email: (email, res) => {
         if(email == undefined || utils.isEmpty(email) || !utils.isValidLength(email, 2)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "O email deve ter mais de 2 caracteres"
             });
-            return;
+            return false;
         }else if(utils.isSpaced(email)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "O email não deve ter espaços"
             });
-            return;
+            return false;
         }else if(!utils.isValidEmail(email)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "Digite um email válido"
             });
-            return;
+            return false;
         }
-
+    },
+    password: (password, res) => {
         if(!utils.isValidLength(password, 8)){
             res.statusCode = 406;
             res.json({
                 status: false,
                 msg: "A senha deve ter pelo menos 8 caracteres"
             });
-            return;
+            return false;
         }
+    }
+}
 
-        const salt = bcrypt.genSaltSync(10);
+class UserController{
+    async create(req, res){
+        const {userName, email, password} = req.body;
+        
+        userValidation.userName(userName, res);
+        userValidation.email(email, res);
+        userValidation.password(password, res);
+        
+
+        
         const hash = bcrypt.hashSync(password, salt);
         
         const data = {
@@ -113,6 +126,57 @@ class UserController{
                 status: false, 
                 msg: "Não há usuários na base de dados"
             })
+        }
+    }
+    async update(req, res){
+        try{
+            const {userName, email, password} = req.body;
+            const id = req.params.id;
+
+            let {user} = await User.findById(id);
+            let data = {
+                id: user[0].id,
+                userName: user[0].userName,
+                email: user[0].email,
+                password: user[0].password
+            };
+
+            if(userName != undefined){
+                if(userValidation.userName(userName, res) == false)
+                return;
+                data.userName = userName;
+            }
+            if(email != undefined){
+                if(userValidation.email(email, res) == false)
+                return;
+                data.email = email;
+                const emailExists = await User.findByEmail(data.email);
+                if(emailExists['user'].length != 0){
+                    res.statusCode = 406;
+                    res.json({status: false, msg: "O email inserido já foi cadastrado"})
+                    return;
+                }
+            }
+            if(password != undefined){
+                if(userValidation.password(password, res) == false)
+                return;
+                const hash = bcrypt.hashSync(password, salt);
+                data.password = hash;
+            }
+            
+                const {status, msg} = await User.update(data, id);
+                if(status){
+                    res.statusCode = 201;
+                    res.json({status, msg})
+                    return;
+                }else{
+                    res.statusCode = 406;
+                    res.json({status, msg})
+                    return;
+                }
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err: err})
         }
     }
 }
