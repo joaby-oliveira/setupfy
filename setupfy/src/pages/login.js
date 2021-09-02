@@ -26,7 +26,6 @@ const Login = () => {
 
   return (
     <div className={`${styles.container} flex mainCenter crossCenter`}>
-      <LoginBackground />
       <form className={`${styles.form} flex column crossCenter`}>
         <Logo />
         <div className={`${styles.inputBlock} flex column`}>
