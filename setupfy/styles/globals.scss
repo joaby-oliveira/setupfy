@@ -6,6 +6,7 @@
   padding: 0;
   margin: 0;
   user-select: none;
+  outline: none;
 }
 
 a {
@@ -21,7 +22,7 @@ h1 {
   color: #FF4656;
 }
 
-h2, h3, h4, p, input {
+h2, h3, h4, p, input, label {
   font-family: 'Poppins', sans-serif;
 }
 

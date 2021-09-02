@@ -1,10 +1,62 @@
+@import "../config/variables";
+
 .container {
-  min-height: 100vh;
+  min-height: calc(100vh - 68px);
   margin: 0 auto;
   .form {
-    width: 40rem;
-    height: 20rem;
-    border: 2px solid black;
     margin-left: 2rem;
+    padding: 2rem;
+    border: $border;
+    border-radius: 0.3rem;
+    width: 25rem;
+    svg {
+      margin-bottom: 2rem;
+    }
+    .passwordVisibilityContainer {
+      position: relative;
+      width: 100%;
+      svg {
+        width: 1.2rem;
+        position: absolute;
+        top: 1.9rem;
+        right: 1rem;
+        color: $color-secondary-3;
+        cursor: pointer;
+      }
+    }
+    .inputBlock {
+      position: relative;
+      width: 100%;
+      margin: 1rem 0;
+      label {
+        position: absolute;
+        bottom: 1.1rem;
+        left: 1rem;
+        cursor: text;
+        font-size: 1rem;
+        color: $color-secondary-3;
+        transition: 0.2s;
+      }
+      input {
+        background: $color-primary-1;
+        border: $border;
+        border-radius: 0.3rem;
+        color: $color-secondary-3;
+        padding: 1rem .8rem;
+        width: 100%;
+        transition: 0.2s;
+        &:focus {
+          border: $border-focused;
+        }
+        & + .onTopLabel {
+          bottom: 2.9rem;
+          background: $color-primary-1;
+          left: 1rem;
+          padding: 0 0.5rem;
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+      }
+    }
   }
 }
