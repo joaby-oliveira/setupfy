@@ -11,12 +11,34 @@ create table users(
     password varchar(120) not null
 );
 
+create table userImages(
+    id int not null auto_increment primary key,
+    name varchar(80) not null,
+    url varchar(255) not null,
+    user_id int not null,
+    constraint fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 create table posts(
     id int not null auto_increment primary key,
     content text not null,
-    img varchar(255),
-    likes int not null,
-    tags varchar(50)
+    likes int not null default 0
+);
+
+
+create table tags(
+    id int not null auto_increment primary key,
+    post_id int not null,
+    content varchar(50) not null,
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+create table postImages(
+    id int not null auto_increment primary key,
+    name varchar(80) not null,
+    url varchar(255) not null,
+    post_id int not null,
+    FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
 create table comments(
