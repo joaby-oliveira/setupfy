@@ -2,7 +2,7 @@ import styles from '../../styles/components/Forms.module.scss'
 
 import Logo from '../../public/setupfy.svg'
 import React, { useRef, useState } from 'react'
-import { Eye, EyeOff } from 'react-feather'
+import { ArrowRight, Eye, EyeOff } from 'react-feather'
 import { Button } from './Button'
 
 export const Login = () => {
@@ -62,7 +62,7 @@ export const Login = () => {
         {isPasswordVisible && <EyeOff onClick={handlePasswordVisibility} />}
         {!isPasswordVisible && <Eye onClick={handlePasswordVisibility} />}
       </div>
-      <Button>Entrar</Button>
+      <Button>Entrar<ArrowRight strokeWidth={3} /></Button>
     </form>
   )
 }
