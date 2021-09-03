@@ -1,15 +1,26 @@
 @import "../config/variables";
 
+@keyframes animateToRight {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .container {
   min-height: calc(100vh - 68px);
   margin: 0 auto;
+  width: 25rem;
   .form {
-    margin-left: 2rem;
+    margin-bottom: 1rem;
     padding: 2rem;
     border: $border;
     border-radius: 0.3rem;
-    width: 25rem;
-    svg {
+    width: 100%;
+    opacity: 0;
+    transform: translateX(-10rem);
+    animation: animateToRight 0.7s forwards;
+    & > svg {
       margin-bottom: 2rem;
     }
     .passwordVisibilityContainer {
@@ -42,7 +53,7 @@
         border: $border;
         border-radius: 0.3rem;
         color: $color-secondary-3;
-        padding: 1rem .8rem;
+        padding: 1rem 0.8rem;
         width: 100%;
         transition: 0.2s;
         &:focus {
@@ -56,6 +67,24 @@
           font-size: 0.9rem;
           font-weight: 700;
         }
+      }
+    }
+  }
+  .formBottom {
+    width: 100%;
+    border: $border;
+    border-radius: 0.3rem;
+    padding: 1rem;
+    text-align: center;
+    color: $color-secondary-3;
+    .signLink {
+      cursor: pointer;
+      color: $color-enphasis-1;
+      font-weight: 700;
+      transition: 0.2s;
+      margin-left: 0.4rem;
+      &:hover {
+        color: $color-enphasis-2;
       }
     }
   }
