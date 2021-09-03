@@ -3,8 +3,8 @@ const database = require("../database/database");
 class User{
     async create(data){
         try{
-            await database.insert(data).table("users");
-            return {status: true, msg: 'Usuário inserido'}
+            const user = await database.insert(data).table("users");
+            return {status: true, msg: 'Usuário inserido', user}
         }catch(err){
             return {status: false, msg: 'Usuário não pode ser inserido'}
         }
@@ -52,6 +52,14 @@ class User{
            return {status: true, msg: "Usuário atualizado com sucesso", result}
         }catch(err){
             return {status: false, msg: 'Usuário não pode ser atualizado erro: ' + err}
+        }
+    }
+    async insertImage(image){
+        try{
+            await database.insert(image).table("userImages");
+            return {status: true, msg: 'Imagem inserido'}
+        }catch(err){
+            return {status: false, err: err}
         }
     }
 }

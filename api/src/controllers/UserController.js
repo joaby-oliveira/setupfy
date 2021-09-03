@@ -76,11 +76,23 @@ class UserController{
             password: hash
         }
 
-
         const { status, user } = await User.findByEmail(data.email);
         if(user.length == 0){
-            const { status, msg } = await User.create(data);
+            const { status, msg} = await User.create(data);
             if(status){
+                const { user: newUser } = await User.findByEmail(data.email);
+                const image = {
+                    name: req.file.filename,
+                    url: "localhost:8080/files/" + req.file.filename,
+                    user_id: newUser[0].id
+                }
+                const {status, err} = await User.insertImage(image);
+                if(status){
+                    res.statusCode = 201;
+                }else{
+                    res.statusCode = 406;
+                    res.json({status, err})
+                }
                 res.statusCode = 201;
                 res.json({status, msg})
             }else{
