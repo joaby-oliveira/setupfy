@@ -1,5 +1,12 @@
 @import "../config/variables";
 
+@keyframes animateToRight {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .container {
   min-height: calc(100vh - 68px);
   margin: 0 auto;
@@ -10,6 +17,9 @@
     border: $border;
     border-radius: 0.3rem;
     width: 100%;
+    opacity: 0;
+    transform: translateX(-10rem);
+    animation: animateToRight 0.7s forwards;
     & > svg {
       margin-bottom: 2rem;
     }
