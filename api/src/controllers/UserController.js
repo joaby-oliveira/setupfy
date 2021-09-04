@@ -2,6 +2,8 @@ const User = require("../models/User");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 
+require('dotenv').config()
+
 const salt = bcrypt.genSaltSync(10);
 
 const userValidation = {
@@ -84,7 +86,7 @@ class UserController{
                     const { user: newUser } = await User.findByEmail(data.email);
                     const image = {
                         name: req.file.filename,
-                        url: "localhost:8080/files/" + req.file.filename,
+                        url: process.env.FILES_URL + req.file.filename,
                         user_id: newUser[0].id
                     }
                     const {status, err} = await User.insertImage(image);
