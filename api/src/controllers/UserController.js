@@ -185,13 +185,15 @@ class UserController{
             const {userName, email, password} = req.body;
             const id = req.params.id;
 
-            let {user} = await User.findById(id);
+            let {users: user} = await User.findById(id);
+            console.log(user)
             let data = {
                 id: user[0].id,
                 userName: user[0].userName,
                 email: user[0].email,
                 password: user[0].password
             };
+
 
             if(userName != undefined){
                 if(userValidation.userName(userName, res) == false)
@@ -215,20 +217,35 @@ class UserController{
                 const hash = bcrypt.hashSync(password, salt);
                 data.password = hash;
             }
-            
-                const {status, msg} = await User.update(data, id);
-                if(status){
-                    res.statusCode = 201;
-                    res.json({status, msg})
-                    return;
-                }else{
-                    res.statusCode = 406;
-                    res.json({status, msg})
-                    return;
-                }
+            console.log(data)
+            const {status, msg} = await User.update(data, id);
+            if(status){
+                if(req.file != undefined) {
+                    const image = {
+                        name: req.file.filename,
+                        url: process.env.FILES_URL + req.file.filename,
+                        user_id: id
+                    }
+                    const {status: imgStatus, err} = await User.updateImage(image, id);
+                    if(imgStatus){
+                        res.statusCode = 201;
+                    }else{
+                        res.statusCode = 406;
+                        res.json({status, err})
+                    }
+                }    
+                res.statusCode = 201;
+                res.json({status, msg})
+                return;
+            }else{
+                res.statusCode = 406;
+                res.json({status, msg})
+                return;
+            }
+
         }catch(err){
             res.statusCode = 406;
-            res.json({status: false, err: err})
+            res.json({status: false, err})
         }
     }
 }

@@ -44,7 +44,7 @@ class User{
     }
 
     async findById(id){
-            let users = await database.select(["users.id", "users.userName", "users.email", "userImages.url as imgUrl"])
+            let users = await database.select(["users.id", "users.userName", "users.email", "users.password", "userImages.url as imgUrl"])
             .table("users")
             .innerJoin("userImages", "userImages.user_id", "users.id")
             .where("user_id", id);
@@ -63,7 +63,15 @@ class User{
     async insertImage(image){
         try{
             await database.insert(image).table("userImages");
-            return {status: true, msg: 'Imagem inserido'}
+            return {status: true, msg: 'Imagem inserida'}
+        }catch(err){
+            return {status: false, err: err}
+        }
+    }
+    async updateImage(image, user_id){
+        try{
+            await database.update(image).table("userImages").where({user_id: user_id});
+            return {status: true, msg: 'Imagem atualizada'}
         }catch(err){
             return {status: false, err: err}
         }
