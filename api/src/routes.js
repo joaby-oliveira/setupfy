@@ -11,12 +11,9 @@ router.get('/', (req, res) => {
 });
 
 router.post("/user", multer(multerConfig).single('file'), UserController.create);
-router.post("/userImage", multer(multerConfig).single('file'), (req, res) =>{
-    console.log(req.file)
-    res.json({msg: "ok"});
-})
-router.get("/user/:userName", UserController.findUser);
+router.get("/user/:userName", UserController.findUserByName);
 router.get("/users", UserController.findAllUsers);
+router.get("/users/:id", UserController.findUserById);
 router.put("/user/:id", UserController.update);
 
 module.exports = router;

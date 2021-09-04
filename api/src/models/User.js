@@ -21,16 +21,22 @@ class User{
 
     async findByName(userName){
         try{
-            let user = await database.select().table("users").where('userName', 'like', '%'+ userName +'%');
-            return {status: true, user}
+            let users = await database.select(["users.id", "users.userName", "users.email", "userImages.url as imgUrl"])
+            .table("users")
+            .innerJoin("userImages", "userImages.user_id", "users.id")
+            .where('userName', 'like', '%'+ userName +'%');
+
+            return {status: true, users}
         }catch(err){
-            return {status: false, user}
+            return {status: false, err}
         }
     }
 
     async findAllUsers(){
         try{
-            let user = await database.select().table("users");
+            let user = await database.select(["users.id", "users.userName", "users.email", "userImages.url as imgUrl"])
+            .table("users")
+            .innerJoin("userImages", "userImages.user_id", "users.id")
             return {status: true, user}
         }catch(err){
             return {status: false, user}
@@ -38,12 +44,12 @@ class User{
     }
 
     async findById(id){
-        try{
-            let user = await database.select().table("users").where({id: id});
-            return {status: true, user}
-        }catch(err){
-            return {status: false, msg: err}
-        }
+            let users = await database.select(["users.id", "users.userName", "users.email", "userImages.url as imgUrl"])
+            .table("users")
+            .innerJoin("userImages", "userImages.user_id", "users.id")
+            .where("user_id", id);
+
+            return {users};
     }
 
     async update(data, id){
@@ -60,6 +66,15 @@ class User{
             return {status: true, msg: 'Imagem inserido'}
         }catch(err){
             return {status: false, err: err}
+        }
+    }
+
+    async findImage(id){
+        try{
+            let image = await database.select().table("userImages").where({user_id: id});
+            return {status: true, image}
+        }catch(err){
+            return {status: false, err}
         }
     }
 }

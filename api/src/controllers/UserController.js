@@ -60,84 +60,122 @@ const userValidation = {
 
 class UserController{
     async create(req, res){
-        const {userName, email, password} = req.body;
-        
-        userValidation.userName(userName, res);
-        userValidation.email(email, res);
-        userValidation.password(password, res);
-        
+        try{
+            const {userName, email, password} = req.body;
+            
+            userValidation.userName(userName, res);
+            userValidation.email(email, res);
+            userValidation.password(password, res);
+            
 
-        
-        const hash = bcrypt.hashSync(password, salt);
-        
-        const data = {
-            userName,
-            email,
-            password: hash
-        }
+            
+            const hash = bcrypt.hashSync(password, salt);
+            
+            const data = {
+                userName,
+                email,
+                password: hash
+            }
 
-        const { status, user } = await User.findByEmail(data.email);
-        if(user.length == 0){
-            const { status, msg} = await User.create(data);
-            if(status){
-                const { user: newUser } = await User.findByEmail(data.email);
-                const image = {
-                    name: req.file.filename,
-                    url: "localhost:8080/files/" + req.file.filename,
-                    user_id: newUser[0].id
-                }
-                const {status, err} = await User.insertImage(image);
+            const { status, user } = await User.findByEmail(data.email);
+            if(user.length == 0){
+                const { status, msg} = await User.create(data);
                 if(status){
+                    const { user: newUser } = await User.findByEmail(data.email);
+                    const image = {
+                        name: req.file.filename,
+                        url: "localhost:8080/files/" + req.file.filename,
+                        user_id: newUser[0].id
+                    }
+                    const {status, err} = await User.insertImage(image);
+                    if(status){
+                        res.statusCode = 201;
+                    }else{
+                        res.statusCode = 406;
+                        res.json({status, err})
+                    }
                     res.statusCode = 201;
+                    res.json({status, msg})
                 }else{
                     res.statusCode = 406;
-                    res.json({status, err})
+                    res.json({status, msg})
                 }
-                res.statusCode = 201;
-                res.json({status, msg})
             }else{
                 res.statusCode = 406;
-                res.json({status, msg})
+                res.json({status: false, msg: "O email inserido já foi cadastrado"})
             }
-        }else{
+        }catch(err){
             res.statusCode = 406;
-            res.json({status: false, msg: "O email inserido já foi cadastrado"})
+            res.json({status: false, err: err})
         }
-
     }
-    async findUser(req, res){
-        const  userName = req.params.userName;
+    async findUserByName(req, res){
+        try{
+            const  userName = req.params.userName;
 
-        const {status, user} = await User.findByName(userName);
-        if(user.length > 0) {
-            res.statusCode = 200;
-            res.json({
-                status, 
-                user
-            })
-        }else{
+            const {status, users} = await User.findByName(userName);
+            if(users.length > 0) {
+                res.statusCode = 200;
+                res.json({
+                    status, 
+                    users
+                })
+            }else{
+                res.statusCode = 406;
+                res.json({
+                    status: false, 
+                    msg: "Usuário não encontrado!"
+                })
+            }
+    
+        }catch(err){
             res.statusCode = 406;
-            res.json({
-                status: false, 
-                msg: "Usuário não encontrado!"
-            })
+            res.json({status: false, err: err})
+        }
+    }
+    async findUserById(req, res){
+        try{
+            const  id = req.params.id;
+
+            const  {users} = await User.findById(id);
+            console.log(users, id)
+            if(users.length > 0) {
+                res.statusCode = 200;
+                res.json({
+                    users
+                })
+            }else{
+                res.statusCode = 406;
+                res.json({
+                    status: false, 
+                    msg: "Usuário não encontrado!"
+                })
+            }
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err: err})
         }
     }
     
     async findAllUsers(req, res){
-        const {status, user} = await User.findAllUsers();
-        if(user.length > 0) {
-            res.statusCode = 200;
-            res.json({
-                status, 
-                user
-            })
-        }else{
+        try{
+            const {status, user} = await User.findAllUsers();
+            if(user.length > 0) {
+                res.statusCode = 200;
+                res.json({
+                    status, 
+                    user
+                })
+            }else{
+                res.statusCode = 406;
+                res.json({
+                    status: false, 
+                    msg: "Não há usuários na base de dados"
+                })
+            }
+        }catch(err){
             res.statusCode = 406;
-            res.json({
-                status: false, 
-                msg: "Não há usuários na base de dados"
-            })
+            res.json({status: false, err: err})
         }
     }
     async update(req, res){
