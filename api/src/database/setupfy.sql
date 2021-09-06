@@ -16,13 +16,15 @@ create table userImages(
     name varchar(80) not null,
     url varchar(255) not null,
     user_id int not null,
-    constraint fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 create table posts(
     id int not null auto_increment primary key,
     content text not null,
-    likes int not null default 0
+    likes int not null default 0,
+    user_id int not null,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
