@@ -1,11 +1,11 @@
 const express = require('express');
 const multer = require('multer');
 const multerConfig = require('./config/multer');
+
 const PostController = require('./controllers/PostController');
+const UserController = require("./controllers/UserController");
 
 const router = express.Router();
-
-const UserController = require("./controllers/UserController");
 
 router.post("/user", multer(multerConfig).single('file'), UserController.create);
 router.get("/user/:userName", UserController.findUserByName);
