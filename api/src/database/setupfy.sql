@@ -21,18 +21,23 @@ create table userImages(
 
 create table posts(
     id int not null auto_increment primary key,
-    content text not null,
+    description text not null,
     likes int not null default 0,
     user_id int not null,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-
 create table tags(
     id int not null auto_increment primary key,
+    tag varchar(50) not null
+);
+
+create table tag_post(
+    id int not null auto_increment primary key,
     post_id int not null,
-    content varchar(50) not null,
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    tag_id int not null,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
 
 create table postImages(
