@@ -22,11 +22,21 @@ class TagController{
 
             const result = await Tag.findOne(tag);
 
-            console.log(result)
-
             res.statusCode = 200;
             res.json({status: true, tag: result});
 
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, msg: "Error: " + err});
+        }
+    }
+
+    async findAll(req, res){
+        try{
+            const result = await Tag.findAll();
+
+            res.statusCode = 200;
+            res.json({status: true, tags: result});
         }catch(err){
             res.statusCode = 406;
             res.json({status: false, msg: "Error: " + err});
