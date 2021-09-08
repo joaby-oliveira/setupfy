@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const Tag = require("../models/Tag");
+const User = require("../models/User");
 
 class PostController{
     async create(req, res){
@@ -37,6 +38,46 @@ class PostController{
         }catch(err){
             res.statusCode = 406;
             res.json({status: false, msg: "Post não pode ser inserido " + err});
+        }
+    }
+    
+    async findAll(req, res){
+        try{
+            let finalPosts = [], newPost = {};
+            const posts = await Post.findAll();
+
+            for(const post of posts){
+                const {users: user} = await User.findById(post.user_id);
+                const tags = await Post.findTags(post.id);
+                let finalTags = [];
+
+                for(const tag of tags){
+                    finalTags.push(tag.tag);
+                }
+
+                newPost = {
+                    post: {
+                        id: post.id,
+                        description: post.description,
+                        likes: post.likes
+                    },
+                    user: {
+                        id: user[0].id,
+                        userName: user[0].userName,
+                        imgUrl: user[0].imgUrl
+                    },
+                    tags: finalTags
+                }
+                
+                finalPosts.push(newPost);
+            }
+
+            res.statusCode = 200;
+            res.json({status: true, posts: finalPosts});
+
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
         }
     }
 }

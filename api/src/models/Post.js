@@ -10,6 +10,21 @@ class Post {
         const post = await database.insert(data).table("tag_post");
         return post[0]
     }
+
+    async findAll(){
+        const posts = await database.select().table("posts")
+
+        return posts
+    }
+
+    async findTags(id){
+        const tags = await database.select()
+        .innerJoin("tags", "tags.id", "tag_post.tag_id")
+        .table("tag_post")
+        .where("post_id", id)
+        
+        return tags;
+    }
 }
 
 module.exports = new Post();
