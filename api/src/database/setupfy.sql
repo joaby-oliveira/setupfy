@@ -17,6 +17,7 @@ create table userImages(
     url varchar(255) not null,
     user_id int not null,
     FOREIGN KEY (user_id) REFERENCES users(id)
+        on update cascade 
 );
 
 create table posts(
@@ -25,6 +26,8 @@ create table posts(
     likes int not null default 0,
     user_id int not null,
     FOREIGN KEY (user_id) REFERENCES users(id)
+        on update cascade 
+        on delete cascade
 );
 
 create table tags(
@@ -36,8 +39,12 @@ create table tag_post(
     id int not null auto_increment primary key,
     post_id int not null,
     tag_id int not null,
-    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+        on update cascade 
+        on delete cascade,
     FOREIGN KEY (tag_id) REFERENCES tags(id)
+        on update cascade 
+        on delete cascade
 );
 
 create table postImages(
@@ -46,6 +53,7 @@ create table postImages(
     url varchar(255) not null,
     post_id int not null,
     FOREIGN KEY (post_id) REFERENCES posts(id)
+        on update cascade 
 );
 
 create table comments(
@@ -53,6 +61,10 @@ create table comments(
     user_id int not null,
     post_id int not null,
     content text not null,
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        on update cascade 
+        on delete cascade,
     FOREIGN KEY (post_id) REFERENCES posts(id)
+        on update cascade 
+        on delete cascade
 );
