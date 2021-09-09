@@ -25,6 +25,12 @@ class Post {
         
         return tags;
     }
+
+    async findById (id) {
+        const post = await database.select().table("posts").where({id: id});
+
+        return post;
+    }
 }
 
 module.exports = new Post();
