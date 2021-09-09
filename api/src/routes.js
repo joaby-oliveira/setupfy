@@ -5,6 +5,7 @@ const multerConfig = require('./config/multer');
 const PostController = require('./controllers/PostController');
 const UserController = require("./controllers/UserController");
 const TagController = require("./controllers/TagController");
+const CommentController = require('./controllers/CommentController');
 
 const router = express.Router();
 
@@ -18,5 +19,11 @@ router.post("/post",PostController.create);
 router.get("/posts",PostController.findAll);
 
 router.get("/tags",TagController.findAll);
+
+router.post("/comment", CommentController.create);
+router.get("/comments/:postId", CommentController.findAll);
+router.delete("/comment/:id", CommentController.delete);
+router.put("/comment/:id", CommentController.update);
+
 
 module.exports = router;
