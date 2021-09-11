@@ -31,6 +31,18 @@ class Post {
 
         return post;
     }
+
+    async findByTag (tag) {
+        const posts = await database.select("posts.id as post_id", "posts.description", "posts.likes", "users.id as user_id", "users.userName", "userImages.url as userImage","tags.tag")
+            .table("tag_post")
+            .innerJoin("posts", "posts.id", "tag_post.post_id")
+            .innerJoin("tags", "tags.id", "tag_post.tag_id")
+            .innerJoin("users", "users.id", "posts.user_id")
+            .innerJoin("userImages", "userImages.user_id", "users.id")
+            .where('tags.tag', 'like', '%' + tag + '%');
+
+        return posts
+    }
 }
 
 module.exports = new Post();

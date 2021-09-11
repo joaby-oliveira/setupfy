@@ -86,6 +86,25 @@ class PostController{
             res.json({status: false, msg: "Erro: " + err});
         }
     }
+
+    async findByTag (req, res ) {
+        try {
+            const {tag} = req.params;
+            
+            const posts = await Post.findByTag(tag)
+
+            if (posts.length > 0) {
+                res.statusCode = 200;
+                res.json({status: true, posts});
+            } else {
+                res.statusCode = 406;
+                res.json({status: false, msg: "Nenhum post foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
 }
 
 module.exports = new PostController();
