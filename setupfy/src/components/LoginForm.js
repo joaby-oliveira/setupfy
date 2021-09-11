@@ -1,16 +1,14 @@
 import styles from '../../styles/components/Forms.module.scss'
 import { Input } from './Input'
 import { Button } from './Button'
-import { useEffect } from 'react'
+import { useForm } from '../Hooks/useForm'
 
 export const LoginForm = () => {
-  useEffect(() => {
-
-  }, [])
+  const username = useForm()
 
   return (
     <form className={styles.form}>
-      <Input label="Nome de usuário" name="username" />
+      <Input label="Nome de usuário" name="username" {...username}/>
       <span className={styles.error}>
         Erro
       </span>
