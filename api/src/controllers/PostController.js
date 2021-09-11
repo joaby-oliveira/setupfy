@@ -6,35 +6,41 @@ class PostController{
     async create(req, res){
         try{
             const {description, user_id, tags = []} = req.body;
-            const data = {
-                description,
-                likes: 0,
-                user_id
-            }
-            
-            const post = await Post.create(data);
+            const {users: user} = await User.findById(user_id)
+            console.log(user)
+            if (user.length > 0) {
+                const data = {
+                    description,
+                    likes: 0,
+                    user_id
+                }
+                
+                const post = await Post.create(data);
 
-            tags.map(async (tag) => {
-                const tagExists = await Tag.findOne(tag);
-                let tagId = 0;
-                if(tagExists.length != 0){
-                    tagId = tagExists[0].id;
-                }else{
-                    const tagData ={
-                        tag
+                tags.map(async (tag) => {
+                    const tagExists = await Tag.findOne(tag);
+                    let tagId = 0;
+                    if(tagExists.length != 0){
+                        tagId = tagExists[0].id;
+                    }else{
+                        const tagData ={
+                            tag
+                        }
+                        tagId = await Tag.create(tagData);
                     }
-                    tagId = await Tag.create(tagData);
-                }
-                const tag_postData = {
-                    post_id: post,
-                    tag_id: tagId
-                }
-                return await Post.tag_postInsert(tag_postData);
-            });
+                    const tag_postData = {
+                        post_id: post,
+                        tag_id: tagId
+                    }
+                    return await Post.tag_postInsert(tag_postData);
+                });
 
-            res.statusCode = 201;
-            res.json({status: true, msg: "Post inserido!"});
-
+                res.statusCode = 201;
+                res.json({status: true, msg: "Post inserido!"});
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Usuário não encontrado na base de dados"});
+            }
         }catch(err){
             res.statusCode = 406;
             res.json({status: false, msg: "Post não pode ser inserido " + err});
