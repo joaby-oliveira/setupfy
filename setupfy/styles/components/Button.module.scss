@@ -11,11 +11,18 @@
   cursor: pointer;
   transition: 0.2s;
   margin-top: 1rem;
-  &:hover {
-    background: $color-enphasis-2;
+  &:not(:disabled):hover {
+    background: $color-enphasis-1;
   }
   &:active {
+    background: $color-enphasis-3;
+  }
+  &:disabled {
     background: $color-enphasis-1;
+    cursor: progress;
+  }
+  &:focus {
+    background: $color-enphasis-2;
   }
   svg {
     margin-left: .5rem;
