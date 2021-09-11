@@ -10,7 +10,7 @@
   border: $border-focused;
   cursor: pointer;
   transition: 0.2s;
-  margin-top: 1rem;
+  margin-top: 2rem;
   &:not(:disabled):hover {
     background: $color-enphasis-1;
   }
