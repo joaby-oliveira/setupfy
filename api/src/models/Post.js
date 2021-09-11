@@ -12,7 +12,9 @@ class Post {
     }
 
     async findAll(){
-        const posts = await database.select().table("posts")
+        const posts = await database.select("posts.id", "posts.description", "posts.likes", "posts.user_id","postImages.url as imgUrl")
+        .leftJoin("postImages", "postImages.post_id", "posts.id")
+        .table("posts")
 
         return posts
     }
@@ -33,15 +35,20 @@ class Post {
     }
 
     async findByTag (tag) {
-        const posts = await database.select("posts.id as post_id", "posts.description", "posts.likes", "users.id as user_id", "users.userName", "userImages.url as userImage","tags.tag")
+        const posts = await database.select("posts.id as post_id", "posts.description", "posts.likes", "postImages.url as postImage","users.id as user_id", "users.userName", "userImages.url as userImage","tags.tag")
             .table("tag_post")
             .innerJoin("posts", "posts.id", "tag_post.post_id")
             .innerJoin("tags", "tags.id", "tag_post.tag_id")
+            .leftJoin("postImages", "postImages.post_id", "posts.id")
             .innerJoin("users", "users.id", "posts.user_id")
             .innerJoin("userImages", "userImages.user_id", "users.id")
             .where('tags.tag', 'like', '%' + tag + '%');
 
         return posts
+    }
+    async insertImage(image){
+        let img = await database.insert(image).table("postImages");
+        return { img }
     }
 }
 
