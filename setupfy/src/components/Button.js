@@ -1,8 +1,8 @@
 import styles from '../../styles/components/Button.module.scss'
 
-export const Button = ({children}) => {
+export const Button = ({children, ...props}) => {
   return (
-    <button className={`${styles.button} flex crossCenter mainCenter`}>
+    <button {...props} className={`${styles.button} flex crossCenter mainCenter`}>
       {children}
     </button>
   )
