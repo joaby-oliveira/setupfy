@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
+const path = require('path');
+const { unlink } = require('fs');
+
+require('dotenv').config()
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -12,6 +16,7 @@ const userValidation = {
                 status: false,
                 msg: "O nome de usuário deve ter pelo menos 3 caracteres"
             });
+            res.utilized = true
             return false;
         }else if(utils.isSpaced(userName)){
             res.statusCode = 406;
@@ -19,6 +24,7 @@ const userValidation = {
                 status: false,
                 msg: "O nome de usuário não deve ter espaços"
             });
+            res.utilized = true
             return false;
         }
     },
@@ -29,6 +35,7 @@ const userValidation = {
                 status: false,
                 msg: "O email deve ter mais de 2 caracteres"
             });
+            res.utilized = true
             return false;
         }else if(utils.isSpaced(email)){
             res.statusCode = 406;
@@ -36,6 +43,7 @@ const userValidation = {
                 status: false,
                 msg: "O email não deve ter espaços"
             });
+            res.utilized = true
             return false;
         }else if(!utils.isValidEmail(email)){
             res.statusCode = 406;
@@ -43,6 +51,7 @@ const userValidation = {
                 status: false,
                 msg: "Digite um email válido"
             });
+            res.utilized = true
             return false;
         }
     },
@@ -60,123 +69,196 @@ const userValidation = {
 
 class UserController{
     async create(req, res){
-        const {userName, email, password} = req.body;
-        
-        userValidation.userName(userName, res);
-        userValidation.email(email, res);
-        userValidation.password(password, res);
-        
+        try{
+            const {userName, email, password} = req.body;
+            const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
+            res.utilized = false;
+            
+            userValidation.userName(userName, res);
+            userValidation.email(email, res);
+            userValidation.password(password, res);
+            
+            if (res.utilized === false) {
+                
+                const hash = bcrypt.hashSync(password, salt);
+                
+                const data = {
+                    userName,
+                    email,
+                    password: hash
+                }
 
-        
-        const hash = bcrypt.hashSync(password, salt);
-        
-        const data = {
-            userName,
-            email,
-            password: hash
+                const { user } = await User.findByEmail(data.email);
+                if(user.length == 0){
+                    await User.create(data);
+                    if(req.file != undefined){
+                        const { user: newUser } = await User.findByEmail(data.email);
+                        const image = {
+                            name: req.file.filename,
+                            url: process.env.FILES_URL + req.file.filename,
+                            user_id: newUser[0].id
+                        }
+                        await User.insertImage(image);
+                    }
+                    res.statusCode = 201;
+                    res.json({status: true, msg: "usuário inserido com sucesso"})
+                }else{
+                    if(req.file != undefined)
+                    unlink(imgPath + '/' + req.file.filename, (err) => {
+                        if (err) throw err
+                    })
+                    res.statusCode = 406;
+                    res.json({status: false, msg: "O email inserido já foi cadastrado"})
+                }
+            }else {
+                if(req.file != undefined)
+                unlink(imgPath + '/' + req.file.filename, (err) => {
+                    if (err) throw err
+                })
+            }
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err: err})
         }
+    }
 
+    async findUserByName(req, res){
+        try{
+            const  userName = req.params.userName;
 
-        const { status, user } = await User.findByEmail(data.email);
-        if(user.length == 0){
-            const { status, msg } = await User.create(data);
-            if(status){
-                res.statusCode = 201;
-                res.json({status, msg})
+            const {users} = await User.findByName(userName);
+            if(users.length > 0) {
+                res.statusCode = 200;
+                res.json({users})
+            }else{
+                res.statusCode = 404;
+                res.json({
+                    status: false, 
+                    msg: "Usuário não encontrado!"
+                })
+            }
+    
+        }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err: err})
+        }
+    }
+    async findUserById(req, res){
+        try{
+            const  id = req.params.id;
+
+            const  {users} = await User.findById(id);
+            console.log(users, id)
+            if(users.length > 0) {
+                res.statusCode = 200;
+                res.json({ users })
             }else{
                 res.statusCode = 406;
-                res.json({status, msg})
+                res.json({
+                    status: false, 
+                    msg: "Usuário não encontrado!"
+                })
             }
-        }else{
+        }catch(err){
             res.statusCode = 406;
-            res.json({status: false, msg: "O email inserido já foi cadastrado"})
-        }
-
-    }
-    async findUser(req, res){
-        const  userName = req.params.userName;
-
-        const {status, user} = await User.findByName(userName);
-        if(user.length > 0) {
-            res.statusCode = 200;
-            res.json({
-                status, 
-                user
-            })
-        }else{
-            res.statusCode = 406;
-            res.json({
-                status: false, 
-                msg: "Usuário não encontrado!"
-            })
+            res.json({status: false, err: err})
         }
     }
     
     async findAllUsers(req, res){
-        const {status, user} = await User.findAllUsers();
-        if(user.length > 0) {
-            res.statusCode = 200;
-            res.json({
-                status, 
-                user
-            })
-        }else{
+        try{
+            const {user} = await User.findAllUsers();
+            if(user.length > 0) {
+                res.statusCode = 200;
+                res.json({ user })
+            }else{
+                res.statusCode = 406;
+                res.json({
+                    status: false, 
+                    msg: "Não há usuários na base de dados"
+                })
+            }
+        }catch(err){
             res.statusCode = 406;
-            res.json({
-                status: false, 
-                msg: "Não há usuários na base de dados"
-            })
+            res.json({status: false, err: err})
         }
     }
     async update(req, res){
         try{
             const {userName, email, password} = req.body;
             const id = req.params.id;
+            const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
 
-            let {user} = await User.findById(id);
-            let data = {
-                id: user[0].id,
-                userName: user[0].userName,
-                email: user[0].email,
-                password: user[0].password
-            };
+            let {users: user} = await User.findById(id);
+            if (user.length > 0){
+                let data = {
+                    id: user[0].id,
+                    userName: user[0].userName,
+                    email: user[0].email,
+                    password: user[0].password
+                };
 
-            if(userName != undefined){
-                if(userValidation.userName(userName, res) == false)
-                return;
-                data.userName = userName;
-            }
-            if(email != undefined){
-                if(userValidation.email(email, res) == false)
-                return;
-                data.email = email;
-                const emailExists = await User.findByEmail(data.email);
-                if(emailExists['user'].length != 0){
-                    res.statusCode = 406;
-                    res.json({status: false, msg: "O email inserido já foi cadastrado"})
+
+                if(userName != undefined){
+                    if(userValidation.userName(userName, res) == false)
                     return;
+                    data.userName = userName;
                 }
-            }
-            if(password != undefined){
-                if(userValidation.password(password, res) == false)
-                return;
-                const hash = bcrypt.hashSync(password, salt);
-                data.password = hash;
-            }
-            
-                const {status, msg} = await User.update(data, id);
-                if(status){
-                    res.statusCode = 201;
-                    res.json({status, msg})
+                if(email != undefined){
+                    if(userValidation.email(email, res) == false)
                     return;
-                }else{
-                    res.statusCode = 406;
-                    res.json({status, msg})
-                    return;
+                    data.email = email;
+                    const emailExists = await User.findByEmail(data.email);
+                    if(emailExists['user'].length != 0){
+                        if(req.file != undefined){
+                            unlink(imgPath + '/' + req.file.filename, (err) => {
+                                if (err) throw err
+                            })
+                        }
+                        res.statusCode = 406;
+                        res.json({status: false, msg: "O email inserido já foi cadastrado"})
+                        return;
+                    }
                 }
+                if(password != undefined){
+                    if(userValidation.password(password, res) == false)
+                    return;
+                    const hash = bcrypt.hashSync(password, salt);
+                    data.password = hash;
+                }
+                await User.update(data, id);
+                if(req.file != undefined) {
+                    const {image: img} = await User.findImage(id)
+                    
+                    const image = {
+                        name: req.file.filename,
+                        url: process.env.FILES_URL + req.file.filename,
+                        user_id: id
+                    }
+
+                    if (img.length > 0) { 
+                        unlink(imgPath + '/' + img[0].name, (err) => {})
+                        await User.updateImage(image, id);
+                    } else {
+                        await User.insertImage(image)
+                    }
+                }
+                res.statusCode = 200;
+                res.json({status: true, msg: "Usuário editado com sucesso"})
+            }else {
+                if(req.file != undefined){
+                    unlink(imgPath + '/' + req.file.filename, (err) => {
+                        if (err) throw err
+                    })
+                }
+                res.statusCode = 404;
+                res.json({ status: false,  msg: "Usuário não encontrado!"})
+                
+            }
+
         }catch(err){
             res.statusCode = 406;
-            res.json({status: false, err: err})
+            res.json({status: false, err})
         }
     }
 }
