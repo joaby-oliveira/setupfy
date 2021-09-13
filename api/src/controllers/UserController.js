@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 const path = require('path');
 const { unlink } = require('fs');
+const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
 
 require('dotenv').config()
 
@@ -71,7 +72,6 @@ class UserController{
     async create(req, res){
         try{
             const {userName, email, password} = req.body;
-            const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
             res.utilized = false;
             
             userValidation.userName(userName, res);
@@ -257,6 +257,30 @@ class UserController{
             }
 
         }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err})
+        }
+    }
+
+    async delete (req, res) {
+        try {
+            const {id} = req.params;
+            const {users: user} = await User.findById(id)
+            
+            if(user.length > 0) {
+                const {image: img} = await User.findImage(id)
+                if(img.length > 0)
+                    unlink(imgPath + '/' + img[0].name, (err) => {})
+
+                await User.delete(id)
+
+                res.statusCode = 200;
+                res.json({status: true, msg: "Usuário deletado com sucesso"})
+            }else {
+                res.statusCode = 404;
+                res.json({ status: false,  msg: "Usuário não encontrado!"})
+            }
+        } catch (err) {
             res.statusCode = 406;
             res.json({status: false, err})
         }
