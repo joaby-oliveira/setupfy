@@ -39,6 +39,9 @@
       position: relative;
       width: 100%;
       margin: 1rem 0;
+      & + .inputBlock {
+        margin-top: 2rem;
+      }
       label {
         position: absolute;
         bottom: 1.1rem;
@@ -70,7 +73,8 @@
       }
     }
     .error {
-      color: #dc143c;
+      color: #ff3a3a;
+      margin: .5rem 0 2rem 1rem;
     }
   }
   .formBottom {
