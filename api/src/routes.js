@@ -18,6 +18,7 @@ router.put("/user/:id", multer(multerConfig).single('file'), UserController.upda
 router.post("/post", multer(multerConfig).single('file'), PostController.create);
 router.get("/posts", PostController.findAll);
 router.get("/posts/:tag", PostController.findByTag);
+router.delete("/post/:id", PostController.delete);
 
 router.get("/tags",TagController.findAll);
 

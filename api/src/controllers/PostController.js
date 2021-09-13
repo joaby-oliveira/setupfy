@@ -118,7 +118,33 @@ class PostController{
                 res.statusCode = 200;
                 res.json({status: true, posts});
             } else {
-                res.statusCode = 406;
+                res.statusCode = 404;
+                res.json({status: false, msg: "Nenhum post foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
+
+    async delete (req, res) {
+        try {
+            const { id } = req.params;
+            const post = await Post.findById(id)
+
+            if (post.length > 0) {
+                const {img} = await Post.findImage(id)
+
+                unlink(imgPath + '/' + img[0].name, (err) => {
+                    if (err) throw err
+                })
+
+                await Post.delete(id)
+
+                res.statusCode = 200;
+                res.json({status: true, msg: "Post deletado com sucesso"});
+            } else {
+                res.statusCode = 404;
                 res.json({status: false, msg: "Nenhum post foi encontrado"});
             }
         } catch (err) {

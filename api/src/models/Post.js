@@ -46,9 +46,27 @@ class Post {
 
         return posts
     }
+
     async insertImage(image){
         let img = await database.insert(image).table("postImages");
+
         return { img }
+    }
+
+    async deleteImage(id){
+        let img = await database.delete().table("postImages").where({post_id: id});
+        return {img}
+    }
+
+    async delete(id) {
+        const post = await database.delete().table("posts").where({id: id})
+    
+        return post
+    }
+
+    async findImage(id){
+        let img = await database.select().table("postImages").where({post_id: id});
+        return {img}
     }
 }
 
