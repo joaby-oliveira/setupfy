@@ -18,6 +18,7 @@ create table userImages(
     user_id int not null,
     FOREIGN KEY (user_id) REFERENCES users(id)
         on update cascade 
+        on delete cascade 
 );
 
 create table posts(
@@ -54,6 +55,7 @@ create table postImages(
     post_id int not null,
     FOREIGN KEY (post_id) REFERENCES posts(id)
         on update cascade 
+        on delete cascade 
 );
 
 create table comments(
