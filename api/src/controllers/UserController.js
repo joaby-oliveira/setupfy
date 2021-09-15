@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 const path = require('path');
@@ -268,9 +269,23 @@ class UserController{
             const {users: user} = await User.findById(id)
             
             if(user.length > 0) {
-                const {image: img} = await User.findImage(id)
-                if(img.length > 0)
-                    unlink(imgPath + '/' + img[0].name, (err) => {})
+                const {image} = await User.findImage(id)
+                if(image.length > 0)
+                    unlink(imgPath + '/' + image[0].name, (err) => {})
+
+                const posts = await Post.findByUserId(id)
+                console.log(posts)
+                for(const post of posts) {
+                    console.log(post.id)
+                    const {img} = await Post.findImage(post.id)
+                    
+                    console.log(img[0].name)
+                    
+                    if(img.length > 0)
+                        unlink(imgPath + '/' + img[0].name, (err) => {})
+
+                    await Post.delete(id)
+                }
 
                 await User.delete(id)
 
