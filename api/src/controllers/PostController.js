@@ -152,6 +152,45 @@ class PostController{
             res.json({status: false, msg: "Erro: " + err});
         }
     }
+
+    async findByUserId (req, res) {
+        try {
+            const {id} = req.params;
+            const newPosts = [];
+            const {users: user} = await User.findById(id);
+
+            if(user.length > 0) {
+                const posts = await Post.findByUserId(id);
+                
+                if (posts.length > 0) {
+                    for (const post of posts) {
+                        const tags = await Post.findTags(post.id);
+                        const newTags = [];
+                        for (const tag of tags) {
+                            newTags.push(tag.tag)
+                        }
+                        const currentPost = {
+                            ...post,
+                            tags: newTags
+                        }
+                        newPosts.push(currentPost);
+                    }
+
+                    res.statusCode = 200;
+                    res.json({status: true, posts: newPosts});
+                }else {
+                    res.statusCode = 404;
+                    res.json({status: false, msg: "Este usuário não possui posts"});
+                }
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Usuario não foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
 }
 
 module.exports = new PostController();

@@ -68,6 +68,14 @@ class Post {
         let img = await database.select().table("postImages").where({post_id: id});
         return {img}
     }
+
+    async findByUserId (id) {
+        const posts = await database.select("posts.id", "posts.description", "posts.likes", "postImages.url")
+        .leftJoin("postImages", "postImages.post_id", "posts.id")
+        .table("posts")
+        .where({user_id: id})
+        return posts
+    }
 }
 
 module.exports = new Post();

@@ -21,6 +21,8 @@ router.get("/posts", PostController.findAll);
 router.get("/posts/:tag", PostController.findByTag);
 router.delete("/post/:id", PostController.delete);
 
+router.get("/user/posts/:id", PostController.findByUserId);
+
 router.get("/tags",TagController.findAll);
 
 router.post("/comment", CommentController.create);
