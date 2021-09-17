@@ -66,6 +66,7 @@ const userValidation = {
                 status: false,
                 msg: "A senha deve ter pelo menos 8 caracteres"
             });
+            res.utilized = true
             return false;
         }
     }
@@ -316,11 +317,27 @@ class UserController{
                 if(user.length > 0) {
                     bcrypt.compare(password, user[0].password, (err, result) => {
                         if (result) {
-                            res.statusCode = 200;
-                            res.json({status: true})
+                            jwt.sign(
+                                {
+                                    id: user[0].id, 
+                                    userName: user[0].userName, 
+                                    email: user[0].email
+                                },
+                                process.env.JWT_SECRET,
+                                {expiresIn: '7d'},
+                                (err, token) => {
+                                    if (err) {
+                                        res.statusCode = 500;
+                                        res.json({status: false, msg: "Erro: " + err});
+                                    } else {
+                                        res.statusCode = 200;
+                                        res.json({status: true, token});
+                                    }
+                                }
+                            )
                         } else {
                             res.statusCode = 401;
-                            res.json({ status: false,  msg: "Email e/ou Senhas inválidos"})
+                            res.json({ status: false,  msg: "Senha inválida"})
                         }
                     })   
                 } else {
