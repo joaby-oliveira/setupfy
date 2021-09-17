@@ -17,8 +17,7 @@ class PostController{
                     user_id
                 }
                 
-                const post = await Post.create(data);
-                
+                const post = await Post.create(data);            
 
                 tags.map(async (tag) => {
                     const tagExists = await Tag.findOne(tag);
@@ -134,10 +133,9 @@ class PostController{
 
             if (post.length > 0) {
                 const {img} = await Post.findImage(id)
-
-                unlink(imgPath + '/' + img[0].name, (err) => {
-                    if (err) throw err
-                })
+                
+                if (img.length > 0)
+                    unlink(imgPath + '/' + img[0].name, (err) => {})
 
                 await Post.delete(id)
 
@@ -185,6 +183,72 @@ class PostController{
             } else {
                 res.statusCode = 404;
                 res.json({status: false, msg: "Usuario não foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
+
+    async update (req, res) {
+        try {
+            const {id} = req.params;
+            const {description, tags = []} = req.body;
+            const post = await Post.findById(id)
+            if (post.length > 0) {
+                const data = {
+                    id: post[0].id,
+                    description: post[0].description,
+                    likes: post[0].likes,
+                    user_id: post[0].user_id
+                }
+
+                if (description != undefined) {
+                    data.description = description
+                }
+
+                await Post.update(data, id)
+                if ( tags.length > 0) {
+                    await Post.tag_postDelete(id);
+                    for (const tag of tags) {
+                        const tagExists = await Tag.findOne(tag);
+                        let tagId = 0;
+                        if(tagExists.length != 0){
+                            tagId = tagExists[0].id;
+                        }else{
+                            const tagData = { tag }
+                            tagId = await Tag.create(tagData);
+                        }
+                        const tag_postData = {
+                            post_id: post[0].id,
+                            tag_id: tagId
+                        }
+                        await Post.tag_postInsert(tag_postData);
+                    }
+                }
+
+                if(req.file != undefined) {
+                    const {img} = await Post.findImage(id);
+                    
+                    const image = {
+                        name: req.file.filename,
+                        url: process.env.FILES_URL + req.file.filename,
+                        post_id: id
+                    }
+
+                    if (img.length > 0) { 
+                        unlink(imgPath + '/' + img[0].name, (err) => {})
+                        await Post.updateImage(image, id);
+                    } else {
+                        await Post.insertImage(image)
+                    }
+                }
+
+                res.statusCode = 200;
+                res.json({status: true, msg: "Post atualizado com sucesso"});
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Post não foi encontrado"});
             }
         } catch (err) {
             res.statusCode = 406;

@@ -20,6 +20,7 @@ router.post("/post", multer(multerConfig).single('file'), PostController.create)
 router.get("/posts", PostController.findAll);
 router.get("/posts/:tag", PostController.findByTag);
 router.delete("/post/:id", PostController.delete);
+router.put("/post/:id", multer(multerConfig).single('file'), PostController.update);
 
 router.get("/user/posts/:id", PostController.findByUserId);
 

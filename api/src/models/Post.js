@@ -11,6 +11,10 @@ class Post {
         return post[0]
     }
 
+    async tag_postDelete(id) {
+        const tag = await database.delete().table("tag_post").where({post_id: id})
+    }
+
     async findAll(){
         const posts = await database.select("posts.id", "posts.description", "posts.likes", "posts.user_id","postImages.url as imgUrl")
         .leftJoin("postImages", "postImages.post_id", "posts.id")
@@ -57,16 +61,21 @@ class Post {
         let img = await database.delete().table("postImages").where({post_id: id});
         return {img}
     }
+    
+    async findImage(id){
+        let img = await database.select().table("postImages").where({post_id: id});
+        return {img}
+    }
+
+    async updateImage(image, id){
+        let img = await database.update(image).table("postImages").where({post_id: id});
+        return { img }
+    }
 
     async delete(id) {
         const post = await database.delete().table("posts").where({id: id})
     
         return post
-    }
-
-    async findImage(id){
-        let img = await database.select().table("postImages").where({post_id: id});
-        return {img}
     }
 
     async findByUserId (id) {
@@ -75,6 +84,11 @@ class Post {
         .table("posts")
         .where({user_id: id})
         return posts
+    }
+
+    async update (data, id) {
+        const post = await database.update(data).table("posts").where({id: id})
+        return post
     }
 }
 
