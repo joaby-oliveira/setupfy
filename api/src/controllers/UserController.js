@@ -3,6 +3,8 @@ const Post = require("../models/Post");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+
 const { unlink } = require('fs');
 const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
 
@@ -294,6 +296,37 @@ class UserController{
             }else {
                 res.statusCode = 404;
                 res.json({ status: false,  msg: "Usuário não encontrado!"})
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, err})
+        }
+    }
+
+    async auth (req, res) {
+        try {
+            const { email, password } = req.body;
+            res.utilized = false
+
+            userValidation.email(email, res);
+            userValidation.password(password, res);
+
+            if (res.utilized == false) {
+                const {user} = await User.findByEmail(email);
+                if(user.length > 0) {
+                    bcrypt.compare(password, user[0].password, (err, result) => {
+                        if (result) {
+                            res.statusCode = 200;
+                            res.json({status: true})
+                        } else {
+                            res.statusCode = 401;
+                            res.json({ status: false,  msg: "Email e/ou Senhas inválidos"})
+                        }
+                    })   
+                } else {
+                    res.statusCode = 404;
+                    res.json({ status: false,  msg: "E-mail não encontrado na base de dados"})
+                }
             }
         } catch (err) {
             res.statusCode = 406;
