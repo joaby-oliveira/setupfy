@@ -9,6 +9,14 @@
     transition: 0.2s;
   }
   .icons {
+    a {
+      display: block;
+      color: $color-secondary-3;
+      padding: 1rem;
+      &:hover {
+        color: $color-secondary-1;
+      }
+    }
     svg {
       margin: 0 1rem;
     }
