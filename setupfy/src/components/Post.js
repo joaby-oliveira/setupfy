@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Heart, MessageCircle } from 'react-feather'
+import { Heart, MessageCircle, MoreVertical } from 'react-feather'
 import styles from '../../styles/components/Post.module.scss'
 const Post = (props) => {
   return (
@@ -13,6 +13,7 @@ const Post = (props) => {
       <div className={`${styles.header} flex crossCenter`}>
         <img src={props.ownerImage} width="60" height="60" className={styles.profileImage} />
         <Link href={`/${props.ownerName}`}><a href=""><h2 className={styles.username}>{props.ownerName}</h2></a></Link>
+        <MoreVertical className="icon" />
       </div >
       <div className={styles.imageBox}>
         <img

@@ -9,6 +9,18 @@
   overflow: hidden;
   .header {
     padding: 1rem;
+    position: relative;
+    & > svg {
+      position: absolute;
+      right: 1rem;
+      cursor: pointer;
+      &:hover {
+        color: $color-secondary-3;
+        &:active {
+          color: $color-primary-2;
+        }
+      }
+    }
     .profileImage {
       width: 3rem;
       height: 3rem;
