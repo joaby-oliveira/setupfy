@@ -90,6 +90,26 @@ class Post {
         const post = await database.update(data).table("posts").where({id: id})
         return post
     }
+
+    async userDidLikePost (user_id, post_id){
+        const userPost = await database.insert({user_id, post_id}).table("user_did_like_post")
+        return userPost
+    }
+
+    async didUserLikePost (user_id, post_id){
+        const userPost = await database.select().table("user_did_like_post").where({user_id, post_id})
+        return userPost
+    }
+
+    async userRemoveLike (user_id, post_id){
+        const userPost = await database.delete().table("user_did_like_post").where({user_id, post_id})
+        return userPost
+    }
+
+    async postLikes (post_id) {
+        const postLikes = await database.select().table("user_did_like_post").where({post_id: post_id})
+        return postLikes
+    }
 }
 
 module.exports = new Post();

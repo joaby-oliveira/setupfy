@@ -27,8 +27,8 @@ const postValidation = {
           return false
         }
     },
-    number: (price, res, length, value) => {
-        if (!utils.isValidMaxLength(price, length)) {
+    number: (number, res, length, value) => {
+        if (!utils.isValidMaxLength(number, length)) {
           res.statusCode = 406
           res.json({
             status: false,
@@ -295,6 +295,92 @@ class PostController{
                     res.statusCode = 404;
                     res.json({status: false, msg: "Post não foi encontrado"});
                 }
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
+
+    async userDidLikePost (req, res) {
+        try {
+            const {user_id, post_id} = req.body
+            const post = await Post.findById(post_id)
+
+            if(post.length > 0) {
+                const {users: user} = await User.findById(user_id)
+
+                if(user.length > 0) {
+                    const userPost = await Post.didUserLikePost(user_id, post_id)
+
+                    if(userPost.length == 0) {
+                        await Post.userDidLikePost(user_id, post_id)
+                        res.statusCode = 200;
+                        res.json({status: true, msg: "Usuário deu like"});
+                    } else {
+                        await Post.userRemoveLike(user_id, post_id)
+                        res.statusCode = 200;
+                        res.json({status: true, msg: "Usuário removeu like"});
+                    }
+                } else {
+                    res.statusCode = 404;
+                    res.json({status: false, msg: "Usuário não foi encontrado"});
+                }
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Post não foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
+    
+    async didUserLikePost (req, res) {
+        try {
+            const {user_id, post_id} = req.body
+            const post = await Post.findById(post_id)
+
+            if(post.length > 0) {
+                const {users: user} = await User.findById(user_id)
+
+                if(user.length > 0) {
+                    const userPost = await Post.didUserLikePost(user_id, post_id)
+
+                    if(userPost.length > 0) {
+                        res.statusCode = 200;
+                        res.json({status: true, msg: "Usuário deu like"});
+                    } else {
+                        res.statusCode = 200;
+                        res.json({status: false, msg: "Usuário não deu like"});
+                    }
+                } else {
+                    res.statusCode = 404;
+                    res.json({status: false, msg: "Usuário não foi encontrado"});
+                }
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Post não foi encontrado"});
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, msg: "Erro: " + err});
+        }
+    }
+
+    async postLikes (req, res) {
+        try {
+            const {id} = req.params
+            const post = await Post.findById(id)
+
+            if(post.length > 0) {
+                const postLikes = await Post.postLikes(id)
+                
+                res.statusCode = 200;
+                res.json({status: true, likes: postLikes.length});
+            } else {
+                res.statusCode = 404;
+                res.json({status: false, msg: "Post não foi encontrado"});
             }
         } catch (err) {
             res.statusCode = 406;

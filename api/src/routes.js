@@ -23,6 +23,7 @@ router.get("/posts", PostController.findAll);
 router.get("/posts/:tag", auth, PostController.findByTag);
 router.delete("/post/:id", auth, PostController.delete);
 router.put("/post/:id", auth, multer(multerConfig).single('file'), PostController.update);
+router.get("/post/like/:id", auth, PostController.postLikes);
 
 router.get("/user/posts/:id", auth, PostController.findByUserId);
 
@@ -33,5 +34,7 @@ router.get("/comments/:postId", CommentController.findAll);
 router.delete("/comment/:id", auth, CommentController.delete);
 router.put("/comment/:id", auth, CommentController.update);
 
+router.post("/userDidLike", auth, PostController.userDidLikePost)
+router.post("/didUserLike", auth, PostController.didUserLikePost)
 
 module.exports = router;
