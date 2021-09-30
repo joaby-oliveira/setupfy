@@ -22,8 +22,9 @@ const Navbar = () => {
           </div>
         )}
         {!isLogged && (
-          <div>
-            <Link href="login"><a>Fazer login</a></Link>
+          <div className={`flex crossCenter`}>
+            <Link href="login"><a className={styles.loginButton}>Fazer login</a></Link>
+            <Link href="register"><a className={styles.registerButton}>Registrar</a></Link>
           </div>
         )}
 

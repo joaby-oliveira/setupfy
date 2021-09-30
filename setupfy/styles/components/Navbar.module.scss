@@ -9,14 +9,6 @@
     transition: 0.2s;
   }
   .icons {
-    a {
-      display: block;
-      color: $color-secondary-3;
-      padding: 1rem;
-      &:hover {
-        color: $color-secondary-1;
-      }
-    }
     svg {
       margin: 0 1rem;
     }
@@ -25,6 +17,22 @@
       border-radius: 10px;
       margin: 0 0 0 1rem;
       border: 2px solid #23ee11;
+    }
+  }
+  .loginButton {
+    color: $color-secondary-2;
+  }
+  .registerButton {
+    display: block;
+    border: 1px solid $color-enphasis-1;
+    border-radius: .2rem;
+    color: $color-enphasis-1;
+    padding: .5rem 2rem !important;
+    margin-left: 2rem;
+    &:hover {
+      background: $color-enphasis-3;
+      border: 1px solid $color-secondary-1;
+      color: $color-secondary-1;
     }
   }
 }
