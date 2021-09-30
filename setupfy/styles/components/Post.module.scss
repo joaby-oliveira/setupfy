@@ -2,8 +2,8 @@
 
 .post {
   margin: 1rem auto;
-  width: 30rem;
-  height: 30rem;
+  max-width: 30rem;
+  max-height: 30rem;
   border: $border;
   border-radius: 0.3rem;
   overflow: hidden;
