@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { Heart, MessageCircle, MoreVertical } from 'react-feather'
 import styles from '../../styles/components/Post.module.scss'
 import { AddComment } from './AddComment'
+import { Comments } from './Comments'
 
 const Post = (props) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const postId = "teste"
   return (
     <div>
       <article className={`${isExpanded ? styles.expandedPost : ''} ${styles.post} flex column`}>
@@ -31,9 +33,12 @@ const Post = (props) => {
           <div className={`${styles.icons} flex crossCenter`}>
             <Heart className="icon" />
             <p className={styles.number}>{props.likes}</p>
-            <MessageCircle className="icon" />
+            <Link href={`posts/${postId}`}>
+              <a><MessageCircle className="icon" /></a>
+            </Link>
             <p className={styles.number}>{props.comments}</p>
           </div>
+          <Comments postId={postId}/>
         </div>
         <AddComment />
       </article>
