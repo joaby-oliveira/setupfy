@@ -16,8 +16,9 @@ create table userImages(
     name varchar(80) not null,
     url varchar(255) not null,
     user_id int not null,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT USER_IMAGE FOREIGN KEY (user_id) REFERENCES users(id)
         on update cascade 
+        on delete cascade 
 );
 
 create table posts(
@@ -25,7 +26,7 @@ create table posts(
     description text not null,
     likes int not null default 0,
     user_id int not null,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT USER_POST FOREIGN KEY (user_id) REFERENCES users(id)
         on update cascade 
         on delete cascade
 );
@@ -39,10 +40,10 @@ create table tag_post(
     id int not null auto_increment primary key,
     post_id int not null,
     tag_id int not null,
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    CONSTRAINT TAG_POST FOREIGN KEY (post_id) REFERENCES posts(id)
         on update cascade 
         on delete cascade,
-    FOREIGN KEY (tag_id) REFERENCES tags(id)
+    CONSTRAINT TAG_TAG FOREIGN KEY (tag_id) REFERENCES tags(id)
         on update cascade 
         on delete cascade
 );
@@ -52,8 +53,9 @@ create table postImages(
     name varchar(80) not null,
     url varchar(255) not null,
     post_id int not null,
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    CONSTRAINT POST_IMAGE FOREIGN KEY (post_id) REFERENCES posts(id)
         on update cascade 
+        on delete cascade 
 );
 
 create table comments(
@@ -61,10 +63,22 @@ create table comments(
     user_id int not null,
     post_id int not null,
     content text not null,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT USER_COMMENT FOREIGN KEY (user_id) REFERENCES users(id)
         on update cascade 
         on delete cascade,
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    CONSTRAINT POST_COMMENT FOREIGN KEY (post_id) REFERENCES posts(id)
+        on update cascade 
+        on delete cascade
+);
+
+create table user_did_like_post(
+    id int not null auto_increment primary key,
+    user_id int not null,
+    post_id int not null,
+    CONSTRAINT USER_LIKE FOREIGN KEY (user_id) REFERENCES users(id)
+        on update cascade 
+        on delete cascade,
+    CONSTRAINT POST_LIKE FOREIGN KEY (post_id) REFERENCES posts(id)
         on update cascade 
         on delete cascade
 );

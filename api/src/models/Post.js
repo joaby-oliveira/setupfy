@@ -11,6 +11,10 @@ class Post {
         return post[0]
     }
 
+    async tag_postDelete(id) {
+        const tag = await database.delete().table("tag_post").where({post_id: id})
+    }
+
     async findAll(){
         const posts = await database.select("posts.id", "posts.description", "posts.likes", "posts.user_id","postImages.url as imgUrl")
         .leftJoin("postImages", "postImages.post_id", "posts.id")
@@ -46,9 +50,65 @@ class Post {
 
         return posts
     }
+
     async insertImage(image){
         let img = await database.insert(image).table("postImages");
+
         return { img }
+    }
+
+    async deleteImage(id){
+        let img = await database.delete().table("postImages").where({post_id: id});
+        return {img}
+    }
+    
+    async findImage(id){
+        let img = await database.select().table("postImages").where({post_id: id});
+        return {img}
+    }
+
+    async updateImage(image, id){
+        let img = await database.update(image).table("postImages").where({post_id: id});
+        return { img }
+    }
+
+    async delete(id) {
+        const post = await database.delete().table("posts").where({id: id})
+    
+        return post
+    }
+
+    async findByUserId (id) {
+        const posts = await database.select("posts.id", "posts.description", "posts.likes", "postImages.url")
+        .leftJoin("postImages", "postImages.post_id", "posts.id")
+        .table("posts")
+        .where({user_id: id})
+        return posts
+    }
+
+    async update (data, id) {
+        const post = await database.update(data).table("posts").where({id: id})
+        return post
+    }
+
+    async userDidLikePost (user_id, post_id){
+        const userPost = await database.insert({user_id, post_id}).table("user_did_like_post")
+        return userPost
+    }
+
+    async didUserLikePost (user_id, post_id){
+        const userPost = await database.select().table("user_did_like_post").where({user_id, post_id})
+        return userPost
+    }
+
+    async userRemoveLike (user_id, post_id){
+        const userPost = await database.delete().table("user_did_like_post").where({user_id, post_id})
+        return userPost
+    }
+
+    async postLikes (post_id) {
+        const postLikes = await database.select().table("user_did_like_post").where({post_id: post_id})
+        return postLikes
     }
 }
 

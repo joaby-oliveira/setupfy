@@ -60,6 +60,11 @@ class User{
         let image = await database.delete().table("userImages").where({user_id: id});
         return {image}
     }
+
+    async delete (id) {
+        const user = await database.delete().table("users").where({id: id});
+        return {user}
+    }
 }
 
 module.exports = new User();

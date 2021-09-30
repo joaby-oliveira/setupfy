@@ -1,8 +1,12 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+
 const { unlink } = require('fs');
+const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
 
 require('dotenv').config()
 
@@ -62,6 +66,7 @@ const userValidation = {
                 status: false,
                 msg: "A senha deve ter pelo menos 8 caracteres"
             });
+            res.utilized = true
             return false;
         }
     }
@@ -71,7 +76,6 @@ class UserController{
     async create(req, res){
         try{
             const {userName, email, password} = req.body;
-            const imgPath = path.resolve(__dirname, '..', '..', 'tmp', 'images')
             res.utilized = false;
             
             userValidation.userName(userName, res);
@@ -257,6 +261,91 @@ class UserController{
             }
 
         }catch(err){
+            res.statusCode = 406;
+            res.json({status: false, err})
+        }
+    }
+
+    async delete (req, res) {
+        try {
+            const {id} = req.params;
+            const {users: user} = await User.findById(id)
+            
+            if(user.length > 0) {
+                const {image} = await User.findImage(id)
+                if(image.length > 0)
+                    unlink(imgPath + '/' + image[0].name, (err) => {})
+
+                const posts = await Post.findByUserId(id)
+                console.log(posts)
+                for(const post of posts) {
+                    console.log(post.id)
+                    const {img} = await Post.findImage(post.id)
+                    
+                    console.log(img[0].name)
+                    
+                    if(img.length > 0)
+                        unlink(imgPath + '/' + img[0].name, (err) => {})
+
+                    await Post.delete(id)
+                }
+
+                await User.delete(id)
+
+                res.statusCode = 200;
+                res.json({status: true, msg: "Usuário deletado com sucesso"})
+            }else {
+                res.statusCode = 404;
+                res.json({ status: false,  msg: "Usuário não encontrado!"})
+            }
+        } catch (err) {
+            res.statusCode = 406;
+            res.json({status: false, err})
+        }
+    }
+
+    async auth (req, res) {
+        try {
+            const { email, password } = req.body;
+            res.utilized = false
+
+            userValidation.email(email, res);
+            userValidation.password(password, res);
+
+            if (res.utilized == false) {
+                const {user} = await User.findByEmail(email);
+                if(user.length > 0) {
+                    bcrypt.compare(password, user[0].password, (err, result) => {
+                        if (result) {
+                            jwt.sign(
+                                {
+                                    id: user[0].id, 
+                                    userName: user[0].userName, 
+                                    email: user[0].email
+                                },
+                                process.env.JWT_SECRET,
+                                {expiresIn: '7d'},
+                                (err, token) => {
+                                    if (err) {
+                                        res.statusCode = 500;
+                                        res.json({status: false, msg: "Erro: " + err});
+                                    } else {
+                                        res.statusCode = 200;
+                                        res.json({status: true, token});
+                                    }
+                                }
+                            )
+                        } else {
+                            res.statusCode = 401;
+                            res.json({ status: false,  msg: "Senha inválida"})
+                        }
+                    })   
+                } else {
+                    res.statusCode = 404;
+                    res.json({ status: false,  msg: "E-mail não encontrado na base de dados"})
+                }
+            }
+        } catch (err) {
             res.statusCode = 406;
             res.json({status: false, err})
         }
