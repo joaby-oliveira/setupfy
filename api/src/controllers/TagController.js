@@ -11,7 +11,7 @@ class TagController{
             res.json({status: true, msg: "Tag inserido!"});
 
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Tag não pode ser inserido " + err});
         }
     }
@@ -26,7 +26,7 @@ class TagController{
             res.json({status: true, tag: result});
 
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Error: " + err});
         }
     }
@@ -38,7 +38,7 @@ class TagController{
             res.statusCode = 200;
             res.json({status: true, tags: result});
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Error: " + err});
         }
     }

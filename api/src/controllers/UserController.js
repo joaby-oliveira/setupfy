@@ -121,7 +121,7 @@ class UserController{
                 })
             }
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err: err})
         }
     }
@@ -143,10 +143,11 @@ class UserController{
             }
     
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err: err})
         }
     }
+
     async findUserById(req, res){
         try{
             const  id = req.params.id;
@@ -164,7 +165,7 @@ class UserController{
                 })
             }
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err: err})
         }
     }
@@ -183,10 +184,11 @@ class UserController{
                 })
             }
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err: err})
         }
     }
+
     async update(req, res){
         try{
             const {userName, email, password} = req.body;
@@ -261,7 +263,7 @@ class UserController{
             }
 
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err})
         }
     }
@@ -299,7 +301,7 @@ class UserController{
                 res.json({ status: false,  msg: "Usuário não encontrado!"})
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err})
         }
     }
@@ -346,7 +348,7 @@ class UserController{
                 }
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, err})
         }
     }

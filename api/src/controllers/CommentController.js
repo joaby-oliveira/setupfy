@@ -58,7 +58,7 @@ class CommentController {
                 }
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Não foi possível adicionar o comentário: " + err});
         }
     }
@@ -71,7 +71,7 @@ class CommentController {
             res.statusCode = 200;
             res.json({status: true, comments});
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -84,7 +84,7 @@ class CommentController {
             res.statusCode = 200;
             res.json({status: true, msg: "Comentário deletado com sucesso"});
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -122,7 +122,7 @@ class CommentController {
                 res.json({status: false, msg: "Comentário não exite na base de dados"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Não foi possível adicionar o comentário: " + err});
         }
     }
