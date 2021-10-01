@@ -1,0 +1,41 @@
+@import '../../../styles/config/variables';
+
+.comments {
+  padding-top: 1rem;
+
+  ul {
+    .moreComments {
+      font-weight: 400;
+      color: $color-secondary-1;
+      margin-top: .5rem;
+      display: block;
+      opacity: .4;
+      transition: .2s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .comment {
+      &+.comment {
+        margin-top: .5rem;
+      }
+
+      .author,
+      .content {
+        font-size: .875rem;
+        color: $color-secondary-3;
+      }
+
+      .author {
+        font-weight: 700;
+      }
+
+      .content {
+        cursor: text;
+        margin-left: .25rem;
+      }
+    }
+  }
+}

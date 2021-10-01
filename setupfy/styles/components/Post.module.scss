@@ -2,13 +2,25 @@
 
 .post {
   margin: 1rem auto;
-  width: 30rem;
-  height: 30rem;
+  max-width: 30rem;
+  max-height: 36rem;
   border: $border;
   border-radius: 0.3rem;
   overflow: hidden;
   .header {
     padding: 1rem;
+    position: relative;
+    & > svg {
+      position: absolute;
+      right: 1rem;
+      cursor: pointer;
+      &:hover {
+        color: $color-secondary-3;
+        &:active {
+          color: $color-primary-2;
+        }
+      }
+    }
     .profileImage {
       width: 3rem;
       height: 3rem;
@@ -18,11 +30,11 @@
     .username {
       font-size: 1rem;
       margin-left: 1rem;
-      font-weight: 400;
+      font-weight: 700;
       color: $color-secondary-1;
       transition: 0.2s ease;
       &:hover {
-        font-weight: 700;
+        text-decoration: underline;
       }
     }
   }

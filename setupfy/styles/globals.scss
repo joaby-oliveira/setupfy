@@ -5,7 +5,6 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  user-select: none;
   outline: none;
 }
 
@@ -22,7 +21,7 @@ h1 {
   color: #FF4656;
 }
 
-h2, h3, h4, p, input, label, button, span {
+h2, h3, h4, p, input, label, button, span, a, li {
   font-family: 'Poppins', sans-serif;
 }
 

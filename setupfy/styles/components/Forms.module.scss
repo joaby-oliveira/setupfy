@@ -20,7 +20,10 @@
     opacity: 0;
     transform: translateX(-10rem);
     animation: animateToRight 0.7s forwards;
-    & > svg {
+    .logo {
+      background: $color-primary-1;
+      padding-left: .25rem;
+      margin-top: -3rem;
       margin-bottom: 2rem;
     }
     .passwordVisibilityContainer {
@@ -38,7 +41,6 @@
     .inputBlock {
       position: relative;
       width: 100%;
-      margin: 1rem 0;
       & + .inputBlock {
         margin-top: 2rem;
       }
@@ -74,7 +76,8 @@
     }
     .error {
       color: #ff3a3a;
-      margin: .5rem 0 2rem 1rem;
+      margin-top: .5rem;
+      width: 100%;
     }
   }
   .formBottom {
