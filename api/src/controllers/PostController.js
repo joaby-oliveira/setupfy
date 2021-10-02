@@ -101,7 +101,7 @@ class PostController{
                 unlink(imgPath + '/' + req.file.filename, (err) => {
                     if (err) throw err
                 })
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Post não pode ser inserido " + err});
         }
     }
@@ -142,7 +142,7 @@ class PostController{
             res.json({status: true, posts: finalPosts});
 
         }catch(err){
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -161,7 +161,7 @@ class PostController{
                 res.json({status: false, msg: "Nenhum post foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -186,7 +186,7 @@ class PostController{
                 res.json({status: false, msg: "Nenhum post foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -225,7 +225,7 @@ class PostController{
                 res.json({status: false, msg: "Usuario não foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -297,7 +297,7 @@ class PostController{
                 }
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -331,7 +331,7 @@ class PostController{
                 res.json({status: false, msg: "Post não foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -363,7 +363,7 @@ class PostController{
                 res.json({status: false, msg: "Post não foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
@@ -383,7 +383,7 @@ class PostController{
                 res.json({status: false, msg: "Post não foi encontrado"});
             }
         } catch (err) {
-            res.statusCode = 406;
+            res.statusCode = 500;
             res.json({status: false, msg: "Erro: " + err});
         }
     }
