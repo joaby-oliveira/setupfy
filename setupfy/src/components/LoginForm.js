@@ -10,14 +10,24 @@ export const LoginForm = () => {
   const password = useForm('password')
 
   return (
-    <form className={`${styles.form} flex column`}>
-      <Logo className={styles.logo} />
-      <Input label="Nome de usuário" name="username" required={true} {...username} />
-      <Input label="Senha" name="password" type="password" {...password} />
-      <Link href="esqueci-minha-senha">
-        <a className={`${styles.forgotPass}`}>Esqueci minha senha</a>
-      </Link>
-      <Button>Entrar</Button>
-    </form>
+    <div>
+      <form className={`${styles.form} flex column`}>
+        <Logo className={styles.logo} />
+        <Input label="Nome de usuário" name="username" required={true} {...username} />
+        <Input label="Senha" name="password" type="password" {...password} />
+        <Link href="esqueci-minha-senha">
+          <a className={`${styles.forgotPass}`}>Esqueci minha senha</a>
+        </Link>
+        <Button>Entrar</Button>
+      </form>
+      <div className={`${styles.formBottom}`}>
+        <p>Ou</p>
+        <Link href="criar-conta">
+          <a className={styles.signLink}>
+            Criar uma conta
+          </a>
+        </Link>
+      </div>
+    </div>
   )
 }
