@@ -23,8 +23,7 @@
     .logo {
       background: $color-primary-1;
       padding-left: .25rem;
-      margin-top: -3rem;
-      margin-bottom: 2rem;
+      margin: -3rem auto 2rem auto;
     }
     .passwordVisibilityContainer {
       position: relative;
@@ -46,7 +45,7 @@
       }
       label {
         position: absolute;
-        bottom: 1.1rem;
+        bottom: 1rem;
         left: 1rem;
         cursor: text;
         font-size: 1rem;
@@ -76,8 +75,17 @@
     }
     .error {
       color: #ff3a3a;
-      margin-top: .5rem;
+      margin: .5rem 0 1rem 0;
       width: 100%;
+    }
+    .forgotPass {
+      margin-top: .5rem;
+      color: $color-secondary-1;
+      font-weight: 700;
+      font-size: 14px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   .formBottom {

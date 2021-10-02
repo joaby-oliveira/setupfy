@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import styles from '../../styles/components/Forms.module.scss'
 import { Input } from './Input'
 import { Button } from './Button'
@@ -9,11 +10,14 @@ export const LoginForm = () => {
   const password = useForm('password')
 
   return (
-    <form className={`${styles.form} flex column crossCenter`}>
-      <Logo className={styles.logo}/>
-      <Input label="Nome de usuário" name="username" {...username}/>
-      <Input label="Senha" name="password" {...password}/>
-      <Button>Criar conta</Button>
+    <form className={`${styles.form} flex column`}>
+      <Logo className={styles.logo} />
+      <Input label="Nome de usuário" name="username" required={true} {...username} />
+      <Input label="Senha" name="password" type="password" {...password} />
+      <Link href="esqueci-minha-senha">
+        <a className={`${styles.forgotPass}`}>Esqueci minha senha</a>
+      </Link>
+      <Button>Entrar</Button>
     </form>
   )
 }
